@@ -367,6 +367,7 @@ func (s *session) ShouldAutocommit(ctx context.Context) bool {
 }
 
 func (s *session) Execute(sql string) ([]ast.RecordSet, error) {
+	startTs := time.Now().UnixNano()
 	rawStmts, err := Parse(s, sql)
 	if err != nil {
 		return nil, errors.Trace(err)
@@ -391,6 +392,8 @@ func (s *session) Execute(sql string) ([]ast.RecordSet, error) {
 			rs = append(rs, r)
 		}
 	}
+	endTs := time.Now().UnixNano()
+	log.Warnf("[TIME]\t%d\t%s", (endTs-startTs)/1000000, sql)
 	return rs, nil
 }
 
