@@ -190,7 +190,7 @@ func (ps *perfSchema) EndStatement(state *StatementState) {
 		return
 	}
 
-	log.Debugf("EndStatement: sql %s, connection id %d, type %s", state.sqlText, state.connID, state.stmtType)
+	log.Debugf("EndStatement: cost %d, sql %s, connection id %d, type %s", state.timerEnd-state.timerStart, state.sqlText, state.connID, state.stmtType)
 
 	record := state2Record(state)
 	err := ps.updateEventsStmtsCurrent(state.connID, record)
